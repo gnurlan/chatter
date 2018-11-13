@@ -5,7 +5,9 @@
         <link href="{{ url('/vendor/devdojo/chatter/assets/vendor/spectrum/spectrum.css') }}" rel="stylesheet">
     @endif
     <link href="{{ url('/vendor/devdojo/chatter/assets/css/chatter.css') }}" rel="stylesheet">
-    @if($chatter_editor == 'simplemde')
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+	@if($chatter_editor == 'simplemde')
         <link href="{{ url('/vendor/devdojo/chatter/assets/css/simplemde.min.css') }}" rel="stylesheet">
     @elseif($chatter_editor == 'trumbowyg')
         <link href="{{ url('/vendor/devdojo/chatter/assets/vendor/trumbowyg/ui/trumbowyg.css') }}" rel="stylesheet">
@@ -116,6 +118,18 @@
 					        					{{ ucfirst(substr($post->user->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
 					        				</span>
 					        			@endif
+
+										<div class="forum_user_role_icon">
+										@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
+													<span class="role-icon"><i class="fas fa-user-graduate"></i></span>
+												@endif
+												@if($discussion->user->hasAdminRole())
+													<span class="role-icon"><i class="fas fa-key"></i></span>
+												@endif
+												@if($discussion->user->hasTeacherRole())
+													<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
+												@endif
+										</div>
 					        		</div>
 
 					        		<div class="chatter_middle">
@@ -165,6 +179,18 @@
 		        					{{ strtoupper(substr(Auth::user()->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
 		        				</span>
 		        			@endif
+
+							<div class="forum_user_role_icon">
+								@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
+									<span class="role-icon"><i class="fas fa-user-graduate"></i></span>
+								@endif
+								@if($discussion->user->hasAdminRole())
+									<span class="role-icon"><i class="fas fa-key"></i></span>
+								@endif
+								@if($discussion->user->hasTeacherRole())
+									<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
+								@endif
+							</div>
 		        		</div>
 
 			            <div id="new_discussion">

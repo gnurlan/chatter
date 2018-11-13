@@ -3,6 +3,7 @@
 @section(Config::get('chatter.yields.head'))
     <link href="{{ url('/vendor/devdojo/chatter/assets/vendor/spectrum/spectrum.css') }}" rel="stylesheet">
 	<link href="{{ url('/vendor/devdojo/chatter/assets/css/chatter.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	@if($chatter_editor == 'simplemde')
 		<link href="{{ url('/vendor/devdojo/chatter/assets/css/simplemde.min.css') }}" rel="stylesheet">
 	@elseif($chatter_editor == 'trumbowyg')
@@ -65,11 +66,22 @@
 	    		<div class="chatter_sidebar">
 					<button class="btn btn-primary" id="new_discussion_btn"><i class="chatter-new"></i> @lang('chatter::messages.discussion.new')</button>
 					<a href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-bubble"></i> @lang('chatter::messages.discussion.all')</a>
-          {!! $categoriesMenu !!}
+
+					<input type="text" style="border: 1px solid #ccc;" class="form-control" id="forumMenuSearch" onkeyup="forumMenuSearchPress()" placeholder="Search for disciplines">
+					<div class="forum-menu">
+					{!! $categoriesMenu !!}
+					</div>
 				</div>
 				<!-- END SIDEBAR -->
 	    	</div>
 	        <div class="col-md-9 right-column">
+				<form method="get" action="" class="form-inline">
+					<div class="form-group" style="width: 100%;">
+						<input style="border: 1px solid #ccc; width: 80%" type="text" name="search" class="form-control" placeholder="Search by part text" />
+						<button class="btn btn-primary">Search</button>
+					</div>
+				</form>
+				<br>
 	        	<div class="panel">
 		        	<ul class="discussions">
 		        		@foreach($discussions as $discussion)
@@ -86,14 +98,25 @@
 					        				@else
 					        					<img src="{{ Config::get('chatter.user.relative_url_to_image_assets') . $discussion->user->{$db_field}  }}">
 					        				@endif
-
 					        			@else
 
 					        				<span class="chatter_avatar_circle" style="background-color:#<?= \DevDojo\Chatter\Helpers\ChatterHelper::stringToColorCode($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}) ?>">
 					        					{{ strtoupper(substr($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
 					        				</span>
 
+
 					        			@endif
+										<div class="forum_user_role_icon">
+										@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
+											<span class="role-icon"><i class="fas fa-user-graduate"></i></span>
+											@endif
+											@if($discussion->user->hasAdminRole())
+											<span class="role-icon"><i class="fas fa-key"></i></span>
+											@endif
+											@if($discussion->user->hasTeacherRole())
+											<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
+										@endif
+										</div>
 					        		</div>
 
 					        		<div class="chatter_middle">
@@ -254,5 +277,24 @@
 
 
 	});
+
+    function forumMenuSearchPress() {
+        // Declare variables
+        var input, filter, ul, li, a, i;
+        input = document.getElementById('forumMenuSearch');
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("forum-menu");
+        li = ul.getElementsByTagName('li');
+
+        // Loop through all list items, and hide those who don't match the search query
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
 </script>
 @stop

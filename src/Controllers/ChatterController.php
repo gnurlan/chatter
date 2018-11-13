@@ -6,14 +6,19 @@ use Auth;
 use DevDojo\Chatter\Helpers\ChatterHelper as Helper;
 use DevDojo\Chatter\Models\Models;
 use Illuminate\Routing\Controller as Controller;
+use Illuminate\Http\Request;
 
 class ChatterController extends Controller
 {
-    public function index($slug = '')
+    public function index(Request $request, $slug = '')
     {
         $pagination_results = config('chatter.paginate.num_of_results');
         
-        $discussions = Models::discussion()->with('user')->with('post')->with('postsCount')->with('category')->orderBy(config('chatter.order_by.discussions.order'), config('chatter.order_by.discussions.by'));
+        $discussions = Models::discussion()->
+        with('user')->
+        with('postsCount')->
+        with('category')->
+        orderBy(config('chatter.order_by.discussions.order'), config('chatter.order_by.discussions.by'));
         if (isset($slug)) {
             $category = Models::category()->where('slug', '=', $slug)->first();
             
@@ -22,6 +27,21 @@ class ChatterController extends Controller
                 $discussions = $discussions->where('chatter_category_id', '=', $category->id);
             } else {
                 $current_category_id = null;
+            }
+
+            if($request->input('search'))
+            {
+                $search = $request->input('search');
+                $discussions = $discussions->
+                    whereHas('post', function($query) use ($search){
+                        $query->whereRaw("body like '%" . $search . "%'");
+
+                })->
+                    orWhereRaw("title like '%" . $search . "%'");
+            }
+            else
+            {
+                $discussions = $discussions->with('post');
             }
         }
         
