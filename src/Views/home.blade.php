@@ -64,10 +64,10 @@
 	    	<div class="col-md-3 left-column">
 	    		<!-- SIDEBAR -->
 	    		<div class="chatter_sidebar">
-					<button class="btn btn-primary" id="new_discussion_btn"><i class="chatter-new"></i> @lang('chatter::messages.discussion.new')</button>
-					<a href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-bubble"></i> @lang('chatter::messages.discussion.all')</a>
+					<button class="btn btn-primary" id="new_discussion_btn"><i class="chatter-new"></i> {{ __('New Discussion') }}</button>
+					<a href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-bubble"></i> {{ __('All Discussion') }}</a>
 
-					<input type="text" style="border: 1px solid #ccc;" class="form-control" id="forumMenuSearch" onkeyup="forumMenuSearchPress()" placeholder="Search for disciplines">
+					<input type="text" style="border: 1px solid #ccc;" class="form-control" id="forumMenuSearch" onkeyup="forumMenuSearchPress()" placeholder="{{ __('Search for discipline') }}">
 					<div class="forum-menu">
 					{!! $categoriesMenu !!}
 					</div>
@@ -77,8 +77,8 @@
 	        <div class="col-md-9 right-column">
 				<form method="get" action="" class="form-inline">
 					<div class="form-group" style="width: 100%;">
-						<input style="border: 1px solid #ccc; width: 80%" type="text" name="search" class="form-control" placeholder="Search by part text" />
-						<button class="btn btn-primary">Search</button>
+						<input style="border: 1px solid #ccc; width: 80%" type="text" name="search" class="form-control" placeholder="{{__('Search by part text')}}" />
+						<button class="btn btn-primary">{{__('Search')}}</button>
 					</div>
 				</form>
 				<br>
@@ -121,7 +121,7 @@
 
 					        		<div class="chatter_middle">
 					        			<h3 class="chatter_middle_title">{{ $discussion->title }} <div class="chatter_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>
-					        			<span class="chatter_middle_details">@lang('chatter::messages.discussion.posted_by') <span data-href="/user">{{ ucfirst($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>
+					        			<span class="chatter_middle_details">{{ __('Posted by') }} <span data-href="/user">{{ ucfirst($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>
 					        			@if($discussion->post[0]->markdown)
 					        				<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>
 					        			@else
