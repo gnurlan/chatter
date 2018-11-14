@@ -64,7 +64,9 @@
 	    	<div class="col-md-3 left-column">
 	    		<!-- SIDEBAR -->
 	    		<div class="chatter_sidebar">
+					@if((!\App\Services\Auth::guest() && count(\App\Services\Auth::user()->forumBanned) == 0) || \App\Services\Auth::guest())
 					<button class="btn btn-primary" id="new_discussion_btn"><i class="chatter-new"></i> {{ __('New Discussion') }}</button>
+					@endif
 					<a href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-bubble"></i> {{ __('All Discussion') }}</a>
 
 					<input type="text" style="border: 1px solid #ccc;" class="form-control" id="forumMenuSearch" onkeyup="forumMenuSearchPress()" placeholder="{{ __('Search for discipline') }}">
@@ -86,8 +88,8 @@
 		        	<ul class="discussions">
 		        		@foreach($discussions as $discussion)
 				        	<li>
-				        		<a class="discussion_list" href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
-					        		<div class="chatter_avatar">
+								<span class="discussion_list">
+									<div class="chatter_avatar">
 					        			@if(Config::get('chatter.user.avatar_image_database_field'))
 
 					        				<?php $db_field = Config::get('chatter.user.avatar_image_database_field'); ?>
@@ -107,7 +109,7 @@
 
 					        			@endif
 										<div class="forum_user_role_icon">
-										@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
+											@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
 											<span class="role-icon"><i class="fas fa-user-graduate"></i></span>
 											@endif
 											@if($discussion->user->hasAdminRole())
@@ -115,12 +117,26 @@
 											@endif
 											@if($discussion->user->hasTeacherRole())
 											<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
-										@endif
+											@endif
+
+											@if(!Auth::guest() && \App\Services\Auth::user()->hasAdminRole())
+												@if(count($discussion->user->forumBanned) > 0)
+												<span class="role-icon pull-right"><i class="fas fa-lock"></i></span>
+												@else
+												<span class="role-icon pull-right ban-icon-{{ $discussion->user->id }}" style="cursor: pointer;" onclick="forumBan({{ $discussion->user->id }})"><i class="fas fa-lock-open"></i></span>
+					        					@endif
+											@endif
 										</div>
 					        		</div>
 
 					        		<div class="chatter_middle">
-					        			<h3 class="chatter_middle_title">{{ $discussion->title }} <div class="chatter_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>
+					        			<h3 class="chatter_middle_title">
+											<a  href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
+												{{ $discussion->title }}
+											</a>
+											<div class="chatter_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}
+											</div>
+										</h3>
 					        			<span class="chatter_middle_details">{{ __('Posted by') }} <span data-href="/user">{{ ucfirst($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>
 					        			@if($discussion->post[0]->markdown)
 					        				<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>
@@ -136,7 +152,7 @@
 					        		</div>
 
 					        		<div class="chatter_clear"></div>
-					        	</a>
+								</span>
 				        	</li>
 			        	@endforeach
 		        	</ul>
@@ -296,5 +312,7 @@
             }
         }
     }
+
+    var confirmBanUserMessage = '{{ __('Block user?') }}';
 </script>
 @stop

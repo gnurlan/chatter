@@ -18,7 +18,9 @@ class ChatterController extends Controller
         with('user')->
         with('postsCount')->
         with('category')->
+        orderBy('topic', 'desc')->
         orderBy(config('chatter.order_by.discussions.order'), config('chatter.order_by.discussions.by'));
+
         if (isset($slug)) {
             $category = Models::category()->where('slug', '=', $slug)->first();
             
@@ -43,6 +45,11 @@ class ChatterController extends Controller
             {
                 $discussions = $discussions->with('post');
             }
+        }
+
+        if(empty($slug))
+        {
+            $discussions = $discussions->where('topic', false);
         }
         
         $discussions = $discussions->paginate($pagination_results);

@@ -45,6 +45,19 @@ Route::group([
         'middleware' => $middleware('category.show'),
     ]);
 
+    //Ban user
+    Route::group([
+        'as'         => 'ban.',
+        'namespace'  => 'Api',
+    ], function () use ($route, $middleware, $authMiddleware) {
+        Route::get($route('ban'), [
+            'as' => 'user.ban',
+            'middleware' => 'hasRole:admin',
+            'uses' => 'ChatterUserController@ban',
+            //'middleware' => $middleware('category.show'),
+        ]);
+    });
+
     /*
      * Auth routes.
      */

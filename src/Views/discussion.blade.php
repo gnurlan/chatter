@@ -129,6 +129,14 @@
 												@if($discussion->user->hasTeacherRole())
 													<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
 												@endif
+
+												@if(!Auth::guest() && \App\Services\Auth::user()->hasAdminRole())
+													@if(count($discussion->user->forumBanned) > 0)
+														<span class="role-icon pull-right"><i class="fas fa-lock"></i></span>
+													@else
+														<span class="role-icon pull-right ban-icon-{{ $discussion->user->id }}" style="cursor: pointer;" onclick="forumBan({{ $discussion->user->id }})"><i class="fas fa-lock-open"></i></span>
+													@endif
+												@endif
 										</div>
 					        		</div>
 
@@ -158,7 +166,7 @@
 
 	            <div id="pagination">{{ $posts->links() }}</div>
 
-	            @if(!Auth::guest())
+					@if(!Auth::guest() && count(\App\Services\Auth::user()->forumBanned) == 0)
 
 	            	<div id="new_response">
 
@@ -489,6 +497,9 @@
         @endif
 
 	});
+
+	var confirmBanUserMessage = '{{ __('Block user?') }}';
+
 </script>
 
 <script src="{{ url('/vendor/devdojo/chatter/assets/js/chatter.js') }}"></script>
