@@ -86,7 +86,7 @@
 	                	@foreach($posts as $post)
 	                		<li data-id="{{ $post->id }}" data-markdown="{{ $post->markdown }}">
 		                		<span class="chatter_posts">
-		                			@if(!Auth::guest() && (Auth::user()->id == $post->user->id))
+		                			@if(!Auth::guest() && (Auth::user()->id == $post->user->id || \App\Services\Auth::user()->hasAdminRole()))
 		                				<div id="delete_warning_{{ $post->id }}" class="chatter_warning_delete">
 		                					<i class="chatter-warning"></i> @lang('chatter::messages.response.confirm')
 		                					<button class="btn btn-sm btn-danger pull-right delete_response">@lang('chatter::messages.response.yes_confirm')</button>
@@ -115,7 +115,7 @@
 
 					        			@else
 					        				<span class="chatter_avatar_circle" style="background-color:#<?= \DevDojo\Chatter\Helpers\ChatterHelper::stringToColorCode($post->user->{Config::get('chatter.user.database_field_with_user_name')}) ?>">
-					        					{{ ucfirst(substr($post->user->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
+					        					{{ ucfirst(mb_substr($post->user->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
 					        				</span>
 					        			@endif
 
@@ -176,7 +176,7 @@
 		        				<?php $db_field = Config::get('chatter.user.avatar_image_database_field'); ?>
 
 		        				<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
-		        				@if( (substr(Auth::user()->{$db_field}, 0, 7) == 'http://') || (substr(Auth::user()->{$db_field}, 0, 8) == 'https://') )
+		        				@if( (mb_substr(Auth::user()->{$db_field}, 0, 7) == 'http://') || (substr(Auth::user()->{$db_field}, 0, 8) == 'https://') )
 		        					<img src="{{ Auth::user()->{$db_field}  }}">
 		        				@else
 		        					<img src="{{ Config::get('chatter.user.relative_url_to_image_assets') . Auth::user()->{$db_field}  }}">
@@ -326,6 +326,8 @@
     <input type="hidden" id="chatter_tinymce_plugins" value="{{ Config::get('chatter.tinymce.plugins') }}">
 @endif
 <input type="hidden" id="current_path" value="{{ Request::path() }}">
+
+	@include('chatter::component.banModal')
 
 @stop
 

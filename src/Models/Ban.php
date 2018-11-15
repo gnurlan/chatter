@@ -17,13 +17,15 @@ class Ban extends Model
      * @param $userId
      * @return bool
      */
-    static function setBan($userId)
+    static function setBan($params)
     {
-        if( self::where('user_id', $userId)->count() === 0)
+        if( self::where('user_id', $params['id'])->count() === 0)
         {
             $ban = new self();
-            $ban->user_id = $userId;
+            $ban->user_id = $params['id'];
             $ban->initiator_id = Auth::user()->id;
+            $ban->period = $params['period'];
+            $ban->comment = $params['comment'] ?? '';
             $ban->save();
         }
 

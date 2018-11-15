@@ -103,7 +103,7 @@
 					        			@else
 
 					        				<span class="chatter_avatar_circle" style="background-color:#<?= \DevDojo\Chatter\Helpers\ChatterHelper::stringToColorCode($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}) ?>">
-					        					{{ strtoupper(substr($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
+					        					{{ strtoupper(mb_substr($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}, 0, 1)) }}
 					        				</span>
 
 
@@ -232,6 +232,8 @@
 	<input type="hidden" id="chatter_tinymce_plugins" value="{{ Config::get('chatter.tinymce.plugins') }}">
 @endif
 <input type="hidden" id="current_path" value="{{ Request::path() }}">
+
+	@include('chatter::component.banModal')
 
 @endsection
 

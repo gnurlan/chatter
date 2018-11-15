@@ -16,7 +16,8 @@ class ChatterUserController extends Controller
     public function ban(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|integer|exists:users,id'
+            'id'        => 'required|integer|exists:users,id',
+            'period'    => 'required|integer'
         ]);
 
         if($validator->fails())
@@ -27,7 +28,7 @@ class ChatterUserController extends Controller
             ];
         }
 
-        if(Ban::setBan($request->input('id')))
+        if(Ban::setBan($request->all()))
         {
             return ['status' => true];
         }

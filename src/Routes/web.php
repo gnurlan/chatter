@@ -50,7 +50,7 @@ Route::group([
         'as'         => 'ban.',
         'namespace'  => 'Api',
     ], function () use ($route, $middleware, $authMiddleware) {
-        Route::get($route('ban'), [
+        Route::any($route('ban'), [
             'as' => 'user.ban',
             'middleware' => 'hasRole:admin',
             'uses' => 'ChatterUserController@ban',
