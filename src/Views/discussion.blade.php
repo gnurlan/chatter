@@ -131,10 +131,10 @@
 												@endif
 
 												@if(!Auth::guest() && \App\Services\Auth::user()->hasAdminRole())
-													@if(count($discussion->user->forumBanned) > 0)
+													@if(count($post->user->forumBanned) > 0)
 														<span class="role-icon pull-right"><i class="fas fa-lock"></i></span>
 													@else
-														<span class="role-icon pull-right ban-icon-{{ $discussion->user->id }}" style="cursor: pointer;" onclick="forumBan({{ $discussion->user->id }})"><i class="fas fa-lock-open"></i></span>
+														<span class="role-icon pull-right ban-icon-{{ $post->user->id }}" style="cursor: pointer;" onclick="forumBan({{ $discussion->user->id }})"><i class="fas fa-lock-open"></i></span>
 													@endif
 												@endif
 										</div>
@@ -246,13 +246,15 @@
 					</div>
 
 				@else
-
+					@if(Auth::guest())
 					<div id="login_or_register">
 						<p>
-                            @lang('chatter::messages.auth', ['home' => Config::get('chatter.routes.home')])
-                        </p>
+							{{ __('Please') }}&nbsp;<a href="{{ route('login') }}">{{ __('please login') }}</a>&nbsp;{{ __('or') }}&nbsp;<a href="{{ route('register') }}">{{ __('please register') }}</a>&nbsp;{{ __('to leave a response') }}.
+						</p>
 					</div>
-
+					@else
+					<div class="alert alert-danger" role="alert">{{ __('You can not leave comments because they were banned.') }}</div>
+					@endif
 				@endif
 
 	        </div>
