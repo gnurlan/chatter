@@ -120,13 +120,13 @@
 					        			@endif
 
 										<div class="forum_user_role_icon">
-										@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
+										@if($post->user->hasClientRole() || $post->user->hasAdminRole())
 													<span class="role-icon"><i class="fas fa-user-graduate"></i></span>
 												@endif
-												@if($discussion->user->hasAdminRole())
+												@if($post->user->hasAdminRole())
 													<span class="role-icon"><i class="fas fa-key"></i></span>
 												@endif
-												@if($discussion->user->hasTeacherRole())
+												@if($post->user->hasTeacherRole())
 													<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
 												@endif
 
@@ -189,13 +189,13 @@
 		        			@endif
 
 							<div class="forum_user_role_icon">
-								@if($discussion->user->hasClientRole() || $discussion->user->hasAdminRole())
+								@if($post->user->hasClientRole() || $post->user->hasAdminRole())
 									<span class="role-icon"><i class="fas fa-user-graduate"></i></span>
 								@endif
-								@if($discussion->user->hasAdminRole())
+								@if($post->user->hasAdminRole())
 									<span class="role-icon"><i class="fas fa-key"></i></span>
 								@endif
-								@if($discussion->user->hasTeacherRole())
+								@if($post->user->hasTeacherRole())
 									<span class="role-icon"><i class="fas fa-chalkboard-teacher"></i></span>
 								@endif
 							</div>
