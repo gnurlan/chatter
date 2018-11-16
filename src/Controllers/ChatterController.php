@@ -49,7 +49,9 @@ class ChatterController extends Controller
 
         if(empty($slug))
         {
-            $discussions = $discussions->where('topic', false);
+            $discussions = $discussions->whereHas('category', function($query){
+                $query->where('hidden', true);
+            });
         }
         
         $discussions = $discussions->paginate($pagination_results);
