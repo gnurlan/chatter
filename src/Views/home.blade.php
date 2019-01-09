@@ -131,7 +131,8 @@
 
 					        		<div class="chatter_middle">
 					        			<h3 class="chatter_middle_title">
-											<a  href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
+
+											<a  href="{{ route('chatter.discussion.showInCategory', ['category' => $discussion->category->slug, 'slug' => $discussion->slug]) }}">
 												{{ $discussion->title }}
 											</a>
 											<div class="chatter_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}
