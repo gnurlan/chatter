@@ -67,7 +67,7 @@
 					@if((!\App\Services\Auth::guest() && count(\App\Services\Auth::user()->forumBanned) == 0) || \App\Services\Auth::guest())
 					<button class="btn btn-primary" id="new_discussion_btn"><i class="chatter-new"></i> {{ __('New Discussion') }}</button>
 					@endif
-					<a href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-bubble"></i> {{ __('All Discussion') }}</a>
+					<a href="{{ route('chatter.home') }}"><i class="chatter-bubble"></i> {{ __('All Discussion') }}</a>
 
 					<input type="text" style="border: 1px solid #ccc;" class="form-control" id="forumMenuSearch" onkeyup="forumMenuSearchPress()" placeholder="{{ __('Search for discipline') }}">
 					<div class="forum-menu">
@@ -174,7 +174,7 @@
 		    <div></div>
 		</div>
 
-    	<form id="chatter_form_editor" action="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}" method="POST">
+    	<form id="chatter_form_editor" action="{{ route('chatter.discussion.store') }}" method="POST">
         	<div class="row">
 	        	<div class="col-md-7">
 		        	<!-- TITLE -->

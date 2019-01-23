@@ -114,14 +114,19 @@ class ChatterPostController extends Controller
                 'chatter_alert'      => trans('chatter::alert.success.reason.submitted_to_post'),
                 ];
 
-            return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
+            //return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
+            return redirect()->route('chatter.discussion.showInCategory', ['category' => $category->slug, 'slug' => $discussion->slug])->with($chatter_alert);
         } else {
             $chatter_alert = [
                 'chatter_alert_type' => 'danger',
                 'chatter_alert'      => trans('chatter::alert.danger.reason.trouble'),
                 ];
 
-            return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
+            //return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
+
+            return redirect()->route('chatter.discussion.showInCategory', ['category' => $category->slug, 'slug' => $discussion->slug])->with($chatter_alert);
+
+            //return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
         }
     }
 
@@ -171,6 +176,7 @@ class ChatterPostController extends Controller
         }
 
         $post = Models::post()->find($id);
+
         if (!Auth::guest() && (Auth::user()->id == $post->user_id || \App\Services\Auth::user()->hasAdminRole())) {
             if ($post->markdown) {
                 $post->body = $request->body;
@@ -191,14 +197,16 @@ class ChatterPostController extends Controller
                 'chatter_alert'      => trans('chatter::alert.success.reason.updated_post'),
                 ];
 
-            return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
+            return redirect()->route('chatter.discussion.showInCategory', ['category' => $category->slug, 'slug' => $discussion->slug])->with($chatter_alert);
+
+            //return redirect('/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$category->slug.'/'.$discussion->slug)->with($chatter_alert);
         } else {
             $chatter_alert = [
                 'chatter_alert_type' => 'danger',
                 'chatter_alert'      => trans('chatter::alert.danger.reason.update_post'),
                 ];
 
-            return redirect('/'.config('chatter.routes.home'))->with($chatter_alert);
+            return redirect()->route('chatter.home')->with($chatter_alert);
         }
     }
 
@@ -230,15 +238,23 @@ class ChatterPostController extends Controller
                 $post->discussion()->forceDelete();
             }
 
-            return redirect('/'.config('chatter.routes.home'))->with([
+            return redirect()->route('chatter.home')->with([
                 'chatter_alert_type' => 'success',
                 'chatter_alert'      => trans('chatter::alert.success.reason.destroy_post'),
             ]);
+
+/*
+            return redirect('/'.config('chatter.routes.home'))->with([
+                'chatter_alert_type' => 'success',
+                'chatter_alert'      => trans('chatter::alert.success.reason.destroy_post'),
+            ]);*/
         }
 
         $post->delete();
 
         $url = '/'.config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$post->discussion->category->slug.'/'.$post->discussion->slug;
+
+        $url = route('chatter.discussion.showInCategory', ['category' => $post->discussion->category->slug, 'slug' => $post->discussion->slug]);
 
         return redirect($url)->with([
             'chatter_alert_type' => 'success',

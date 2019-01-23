@@ -26,10 +26,10 @@
 
 	<div id="chatter_header" style="background-color:{{ $discussion->color }}">
 		<div class="container">
-			<a class="back_btn" href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-back"></i></a>
+			<a class="back_btn" href="{{ route('chatter.home') }}"><i class="chatter-back"></i></a>
 			<h1>{{ $discussion->title }}</h1>
 			@if($discussion->category->hidden == false)
-			<span class="chatter_head_details"> {{ __('Posted in category') }}<a class="chatter_cat" href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a></span>
+			<span class="chatter_head_details"> {{ __('Posted in category') }}<a class="chatter_cat" href="{{ route('chatter.category.show', ['slug' => $discussion->category->slug])}}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a></span>
 			@endif
 		</div>
 	</div>
@@ -211,7 +211,7 @@
 							    <div></div>
 							</div>
 
-				            <form id="chatter_form_editor" action="/{{ Config::get('chatter.routes.home') }}/posts" method="POST">
+				            <form id="chatter_form_editor" action="{{ route('chatter.posts.store') }}" method="POST">
 
 						        <!-- BODY -->
 						    	<div id="editor">
@@ -273,7 +273,7 @@
                 <div></div>
             </div>
 
-            <form id="chatter_form_editor_in_discussion_view" action="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}" method="POST">
+            <form id="chatter_form_editor_in_discussion_view" action="{{ route('chatter.posts.edit') }}" method="POST">
                 <div class="row">
                     <div class="col-md-7">
                         <!-- TITLE -->
@@ -444,7 +444,7 @@
                 @endif
 			}
 
-			$.form('/{{ Config::get('chatter.routes.home') }}/posts/' + post_id, { _token: '{{ csrf_token() }}', _method: 'PATCH', 'body' : update_body }, 'POST').submit();
+			$.form('{{ route('chatter.posts.update', ['post' => $post->id]) }}', { _token: '{{ csrf_token() }}', _method: 'PATCH', 'body' : update_body }, 'POST').submit();
 		});
 
 		$('#submit_response').click(function(){
@@ -469,8 +469,8 @@
 
 		$('.delete_response').click(function(){
 			post_id = $(this).parents('li').data('id');
-			$.form('/{{ Config::get('chatter.routes.home') }}/posts/' + post_id, { _token: '{{ csrf_token() }}', _method: 'DELETE'}, 'POST').submit();
-		});
+            $.form('{{ route('chatter.posts.update', ['post' => $post->id]) }}', { _token: '{{ csrf_token() }}', _method: 'DELETE' }, 'POST').submit();
+        });
 
 		// logic for when a new discussion needs to be created from the slideUp
         @if(Config::get('chatter.sidebar_in_discussion_view'))
