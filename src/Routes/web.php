@@ -192,11 +192,11 @@ Route::group(['prefix' => App\Http\Middleware\LocaleMiddleware::getLocale()], fu
             ], function () use ($middleware, $authMiddleware) {
 
                 // Single post view.
-                /*Route::get('/', [
+                Route::get('/', [
                     'as' => 'show',
                     'uses' => 'ChatterPostController@show',
                     'middleware' => $middleware('post.show'),
-                ]);*/
+                ]);
 
                 // Edit post view.
                 Route::get('edit', [

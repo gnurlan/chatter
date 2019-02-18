@@ -40,6 +40,14 @@ class ChatterPostController extends Controller
     }
 
     /**
+     * @param Request $request
+     */
+    public function show(Request $request)
+    {
+        abort(404);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
