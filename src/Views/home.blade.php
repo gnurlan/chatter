@@ -3,7 +3,7 @@
 @section(Config::get('chatter.yields.head'))
     <link href="{{ url('/vendor/devdojo/chatter/assets/vendor/spectrum/spectrum.css') }}" rel="stylesheet">
 	<link href="{{ url('/vendor/devdojo/chatter/assets/css/chatter.css') }}" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link href="{{ url('/vendor/devdojo/chatter/assets/css/fontawesome.css') }}" rel="stylesheet">
 	@if($chatter_editor == 'simplemde')
 		<link href="{{ url('/vendor/devdojo/chatter/assets/css/simplemde.min.css') }}" rel="stylesheet">
 	@elseif($chatter_editor == 'trumbowyg')
