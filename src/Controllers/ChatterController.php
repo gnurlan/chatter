@@ -13,17 +13,17 @@ class ChatterController extends Controller
     public function index(Request $request, $slug = '')
     {
         $pagination_results = config('chatter.paginate.num_of_results');
-        
+
         $discussions = Models::discussion()->
         with('user')->
         with('postsCount')->
         with('category')->
-        orderBy('topic', 'desc')->
+        //orderBy('topic', 'desc')->
         orderBy(config('chatter.order_by.discussions.order'), config('chatter.order_by.discussions.by'));
 
         if (isset($slug)) {
             $category = Models::category()->where('slug', '=', $slug)->first();
-            
+
             if (isset($category->id)) {
                 $current_category_id = $category->id;
                 $discussions = $discussions->where('chatter_category_id', '=', $category->id);
@@ -35,11 +35,11 @@ class ChatterController extends Controller
             {
                 $search = $request->input('search');
                 $discussions = $discussions->
-                    whereHas('post', function($query) use ($search){
-                        $query->whereRaw("body like '%" . $search . "%'");
+                whereHas('post', function($query) use ($search){
+                    $query->whereRaw("body like '%" . $search . "%'");
 
                 })->
-                    orWhereRaw("title like '%" . $search . "%'");
+                orWhereRaw("title like '%" . $search . "%'");
             }
             else
             {
@@ -50,34 +50,34 @@ class ChatterController extends Controller
         if(empty($slug))
         {
             $discussions = $discussions->whereHas('category', function($query){
-                $query->where('hidden', true);
+                //$query->where('hidden', true);
             });
         }
-        
+
         $discussions = $discussions->paginate($pagination_results);
-        
+
         $categories = Models::category()->get();
         $categoriesMenu = Helper::categoriesMenu(array_filter($categories->toArray(), function ($item) {
             return $item['parent_id'] === null;
         }));
-        
+
         $chatter_editor = config('chatter.editor');
-        
+
         if ($chatter_editor == 'simplemde') {
             // Dynamically register markdown service provider
             \App::register('GrahamCampbell\Markdown\MarkdownServiceProvider');
         }
-        
+
         return view('chatter::home', compact('discussions', 'categories', 'categoriesMenu', 'chatter_editor', 'current_category_id'));
     }
-    
+
     public function login()
     {
         if (!Auth::check()) {
             return \Redirect::to('/'.config('chatter.routes.login').'?redirect='.config('chatter.routes.home'))->with('flash_message', 'Please create an account before posting.');
         }
     }
-    
+
     public function register()
     {
         if (!Auth::check()) {

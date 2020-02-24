@@ -34,6 +34,7 @@ class ChatterServiceProvider extends ServiceProvider
             __DIR__.'/Lang' => resource_path('lang/vendor/chatter'),
         ], 'chatter_lang');
 
+        $this->loadViewsFrom(__DIR__.'/Views', 'chatter');
         // include the routes file
         include __DIR__.'/Routes/web.php';
     }
@@ -55,7 +56,5 @@ class ChatterServiceProvider extends ServiceProvider
          */
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Purifier', 'LukeTowers\Purifier\Facades\Purifier');
-
-        $this->loadViewsFrom(__DIR__.'/Views', 'chatter');
     }
 }
