@@ -1,5 +1,5 @@
 {
-    "name": "vbondarenko89/chatter",
+    "name": "gnurlan/chatter",
     "description": "A simple forum package for your laravel app",
     "authors": [
         {
@@ -11,10 +11,10 @@
         "luketowers/purifier": "~3.0"
     },
     "require-dev": {
-        "illuminate/cache": "~5.1.20|5.2.*|5.3.*",
-        "illuminate/console": "~5.1.20|5.2.*|5.3.*",
+        "illuminate/cache": "~5.1.20|5.2.*|5.3.*|6.*",
+        "illuminate/console": "~5.1.20|5.2.*|5.3.*|6.*",
         "mockery/mockery": "^0.9.5",
-        "phpunit/phpunit": "~5.7.14"
+        "phpunit/phpunit": "~5.7.14|6.*"
     },
     "autoload": {
 	    "psr-4": {
